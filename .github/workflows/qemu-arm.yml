@@ -14,6 +14,15 @@ jobs:
     timeout-minutes: 360
 
     steps:
+      # Step 0: Free up 50GB+ of space by wiping unneeded pre-installed host packages
+      - name: Maximize Runner Disk Space
+        uses: justinthelaw/maximize-github-runner-space@v0.12.3
+        with:
+          swapfile-size: 2GiB
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+
       - name: Check out lab
         uses: actions/checkout@v4
 
