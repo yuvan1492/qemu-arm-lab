@@ -1,0 +1,30 @@
+name: QEMU ARM boot
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-boot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 360
+
+    steps:
+      - name: Check out lab
+        uses: actions/checkout@v4
+
+      - name: Install host dependencies
+        run: bash scripts/00-install-deps.sh
+
+      - name: Build U-Boot, Linux, and Buildroot
+        run: bash scripts/01-build.sh
+
+      - name: Create disk image
+        run: bash scripts/02-make-disk.sh
+
+      - name: Boot QEMU through Buildroot userspace
+        run: bash scripts/03-run-qemu.sh --test-boot
